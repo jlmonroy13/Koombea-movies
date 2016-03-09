@@ -6,18 +6,44 @@
 	padding-top: 54px;
 	.main_leftMenu {
 		@include span-columns(2);
-		background-color: rgba(#262626, 0.73);
-		max-height: 90vh;
+		background-color: rgba(#262626, 0.83);
+		max-height: 92vh;
 		overflow: auto;
 		text-align: center;
 		padding-top: 20px;
 		select {
 			margin: 0 auto 0.75em auto;
 		}
+		.main_leftMenu_moviesList {
+			.main_leftMenu_moviesList_movie {
+				margin: 20px 0;
+				>a {
+					img {
+						max-width: 60%;
+						border: 2px solid transparent;
+						&:hover {
+							border: 2px solid $blue;
+						}
+					}
+				}
+				h4 {
+					color: #E3E1E1;
+					font-weight: 400;
+					font-size: 1rem;
+				    margin: 0 auto;
+    				max-width: 120px;
+				}
+				span {
+					color: #7B7B7B;
+					font-weight: 400;
+					font-size: 0.8571rem;
+				}
+			}
+		}
 	}
 	.main_infoMovie {
 		@include span-columns(10);
-		max-height: 90vh;
+		max-height: 92vh;
 		overflow: auto;
 		img {
 			display: block;
@@ -29,6 +55,7 @@
 			max-width: 95%;
 			display: inline-block;
 			padding: 1.4285em;
+			margin-bottom: 30px;
 			>h2 {
 				color: $blue;
 				font-weight: 300;
@@ -49,9 +76,41 @@
 				border-radius: 6px;
 				float: right;
 			}
+			p {
+				color: #AFAFAF;
+				font-weight: 300;
+				font-size: 1rem;
+				margin-bottom: 20px;
+			}
+			h3 {
+				color: $blue;
+				font-size: 1.1428rem
+			}
 			.main_infomovie_similarMoviesList {
 				.similarMovie {
-					@include span-columns(3);
+					@include span-columns(2.8);
+					text-align: center;
+					img {
+						margin: 10px 10px 20px;
+						display: inline-block;
+						vertical-align: middle;
+					}
+					.movie_info {
+						display: inline-block;
+						vertical-align: middle;
+						text-align: left !important;
+						h4 {
+							color: #DEDEDE;
+							font-size: 1rem;
+							font-weight: 400;
+							margin-bottom: 0;
+						}
+						span {
+							color: #7B7B7B;
+							font-size: 0.8571rem;
+							font-weight: 400;
+						}
+					}
 				}
 			}
 		}

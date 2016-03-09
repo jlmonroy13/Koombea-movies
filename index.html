@@ -11,7 +11,11 @@
 <body>
 	<!-- Navbar -->
 	<header class="navbar">
-		<a href="javascript:void(0)" class="navbar_btn_leftmenu"><span>MENU</span></a>
+		<a href="javascript:void(0)" class="navbar_btn_leftmenu">
+			<span></span>
+			<span></span>
+			<span></span>
+		</a>
 		<a href="javascript:void(0)" class="navbar_logo">Koombea <span>Movies</span></a>
 		<nav>
 			<ul class="navbar_buttons">
@@ -38,29 +42,10 @@
 				<option value="popular">Popular</option>
 				<option value="top_rated">Top Rated</option>
 				<option value="upcoming">Upcoming</option>
-				<options value="favorites">Favorites</options>
+				<option value="favorites">Favorites</option> 
 			</select>
-			<div class="main_leftMenu_moviesList">
-				<div class="main_leftMenu_moviesList_movie">
-					<img src="img/left_menu_img_movie.jpg" alt="">
-					<h4>Movie Title</h4>
-					<span>2015</span>
-				</div>
-				<div class="main_leftMenu_moviesList_movie">
-					<img src="img/left_menu_img_movie.jpg" alt="">
-					<h4>Movie Title</h4>
-					<span>2015</span>
-				</div>
-				<div class="main_leftMenu_moviesList_movie">
-					<img src="img/left_menu_img_movie.jpg" alt="">
-					<h4>Movie Title</h4>
-					<span>2015</span>
-				</div>
-				<div class="main_leftMenu_moviesList_movie">
-					<img src="img/left_menu_img_movie.jpg" alt="">
-					<h4>Movie Title</h4>
-					<span>2015</span>
-				</div>
+			<div id="leftMenu" class="main_leftMenu_moviesList">
+				
 			</div>
 		</div>
 		<div class="main_infoMovie">
@@ -73,28 +58,38 @@
 				<div class="main_infomovie_similarMoviesList">
 					<div class="similarMovie">
 						<img src="img/main_similar_img_movie.jpg" alt="Similar Movies">
-						<h4>Title</h4>
-						<span>2015</span>
+						<div class="movie_info">
+							<h4>Movie Title</h4>
+							<span>2015</span>
+						</div>	
 					</div>
 					<div class="similarMovie">
 						<img src="img/main_similar_img_movie.jpg" alt="Similar Movies">
-						<h4>Title</h4>
-						<span>2015</span>
+						<div class="movie_info">
+							<h4>Movie Title</h4>
+							<span>2015</span>
+						</div>	
 					</div>
 					<div class="similarMovie">
 						<img src="img/main_similar_img_movie.jpg" alt="Similar Movies">
-						<h4>Title</h4>
-						<span>2015</span>
+						<div class="movie_info">
+							<h4>Movie Title</h4>
+							<span>2015</span>
+						</div>	
 					</div>
 					<div class="similarMovie">
 						<img src="img/main_similar_img_movie.jpg" alt="Similar Movies">
-						<h4>Title</h4>
-						<span>2015</span>
+						<div class="movie_info">
+							<h4>Movie Title</h4>
+							<span>2015</span>
+						</div>	
 					</div>
 					<div class="similarMovie">
 						<img src="img/main_similar_img_movie.jpg" alt="Similar Movies">
-						<h4>Title</h4>
-						<span>2015</span>
+						<div class="movie_info">
+							<h4>Movie Title</h4>
+							<span>2015</span>
+						</div>	
 					</div>
 				</div>
 			</div>
@@ -106,6 +101,5 @@
 	<!-- Javascript -->
 	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="js/app.js"></script>
-	<script src="js/refills.js"></script>
 </body>
 </html>
