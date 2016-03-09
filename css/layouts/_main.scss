@@ -1,0 +1,59 @@
+.main {
+	background: url('../img/main_bckg_movie_cover.jpg') no-repeat;
+	background-size: cover;
+	margin-top: -54px;
+	height: 100vh;
+	padding-top: 54px;
+	.main_leftMenu {
+		@include span-columns(2);
+		background-color: rgba(#262626, 0.73);
+		max-height: 90vh;
+		overflow: auto;
+		text-align: center;
+		padding-top: 20px;
+		select {
+			margin: 0 auto 0.75em auto;
+		}
+	}
+	.main_infoMovie {
+		@include span-columns(10);
+		max-height: 90vh;
+		overflow: auto;
+		img {
+			display: block;
+			margin: 40px auto;
+		}
+		.main_infoMovie_description {
+			background-color: rgba(#101010, 0.76);
+			border-radius: 10px;
+			max-width: 95%;
+			display: inline-block;
+			padding: 1.4285em;
+			>h2 {
+				color: $blue;
+				font-weight: 300;
+				font-size: 1.4285rem;
+				text-align: left !important;
+				display: inline-block;
+			}
+			.btn-favorites {
+				display: inline-block;
+				color: white;
+				background-color: $blue;
+				font-size: 0.9285rem;
+				padding: 0.3571em 3.2142em;
+				background-image: url('../img/main_favorite_Star.png');
+				background-repeat: no-repeat;
+				background-size: 18px 18px;
+				background-position: 20px 7px; 
+				border-radius: 6px;
+				float: right;
+			}
+			.main_infomovie_similarMoviesList {
+				.similarMovie {
+					@include span-columns(3);
+				}
+			}
+		}
+	}
+}
