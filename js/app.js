@@ -175,7 +175,11 @@ $(function() {
 		mainHTML += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[index].trailer+'" frameborder="0" allowfullscreen></iframe>'
 		mainHTML += '<div  class="main_infoMovie_description">';
 		mainHTML += '<h2>'+allMovies[index].title+'</h2>';
-		mainHTML += '<a href="" class="btn-favorites">ADD TO FAVORITES</a>';
+		if(allMovies[index].favorite) {
+			mainHTML += '<a href="" data-index="'+index+'" class="btn-favorites btn-favoritesN">REMOVE FROM FAVORITES</a>';
+		} else {
+			mainHTML += '<a href="" data-index="'+index+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+		}
 		mainHTML += '<p>'+allMovies[index].overview+'</p>';
 		mainHTML += '<h3>Similar Movies</h3>';
 		mainHTML += '<div class="main_infomovie_similarMoviesList">';
@@ -190,6 +194,48 @@ $(function() {
 		mainHTML += '</div></div>';
 		$('#info-movie').html(mainHTML);
 	});
+
+
+	
+			
+	//Add to favorites
+	var index;
+	var exists = 0;
+	$('#info-movie').on('click', '.btn-favorites', function(event){
+		event.preventDefault();
+		index = $(this).data('index');
+		console.log(allMovies[index]);
+		if(allMovies[index].favorite) {
+			allMovies[index].favorite = false;
+			$(this).text('ADD TO FAVORITE');
+			$(this).removeClass('btn-favoritesN');
+			$(this).addClass('btn-favoritesB');
+		} else {
+			allMovies[index].favorite = true;
+			$(this).text('REMOVE FROM FAVORITES');
+			$(this).removeClass('btn-favoritesB');
+			$(this).addClass('btn-favoritesN');
+			$('.main_leftMenu_categories option').each(function(){
+			    if (this.value !== 'favorites') {
+					exists += 1;
+			    }else if (this.value === 'favorites') {
+			    	exists += 1;
+			    }
+			});
+			if(exists === 4) {
+				var selectHTML = '';
+				$('.main_leftMenu_categories').append('<option value="favorites">Favorites</option>');
+				exists = 0;
+			} else if(exists === 5) { 
+				alert('SIIIIIIII hay favoritos');
+				exists = 0;
+			}
+		}
+	}); //end favorite click function
+
+
+
+
 
 	// $('.main').on('click', function() {
 	// 	// var index = $(this).data('index');

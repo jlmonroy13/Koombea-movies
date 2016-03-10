@@ -524,7 +524,6 @@ header {
       .main .main_infoMovie .main_infoMovie_description .btn-favorites {
         display: inline-block;
         color: white;
-        background-color: #58A5FF;
         font-size: 0.9285rem;
         padding: 0.3571em 3.2142em;
         background-image: url("../img/main_favorite_Star.png");
@@ -533,6 +532,10 @@ header {
         background-position: 20px 7px;
         border-radius: 6px;
         float: right; }
+      .main .main_infoMovie .main_infoMovie_description .btn-favoritesN {
+        background-color: #ED7F00; }
+      .main .main_infoMovie .main_infoMovie_description .btn-favoritesB {
+        background-color: #58A5FF; }
       .main .main_infoMovie .main_infoMovie_description p {
         color: #AFAFAF;
         font-weight: 300;

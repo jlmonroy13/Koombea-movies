@@ -74,7 +74,6 @@
 			.btn-favorites {
 				display: inline-block;
 				color: white;
-				background-color: $blue;
 				font-size: 0.9285rem;
 				padding: 0.3571em 3.2142em;
 				background-image: url('../img/main_favorite_Star.png');
@@ -83,6 +82,12 @@
 				background-position: 20px 7px; 
 				border-radius: 6px;
 				float: right;
+			}
+			.btn-favoritesN {
+				background-color: #ED7F00;
+			}
+			.btn-favoritesB {
+				background-color: $blue;
 			}
 			p {
 				color: #AFAFAF;
