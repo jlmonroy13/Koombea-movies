@@ -13,6 +13,11 @@
 		padding-top: 20px;
 		select {
 			margin: 0 auto 0.75em auto;
+			background-color: #101010;
+			color: white;
+			font-size: 0.9285rem;
+			border-color: #454545;
+			font-weight: 300;
 		}
 		.main_leftMenu_moviesList {
 			.main_leftMenu_moviesList_movie {
@@ -45,9 +50,12 @@
 		@include span-columns(10);
 		max-height: 92vh;
 		overflow: auto;
-		img {
+		iframe {
 			display: block;
 			margin: 40px auto;
+			-webkit-box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
+			-moz-box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
+			box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
 		}
 		.main_infoMovie_description {
 			background-color: rgba(#101010, 0.76);
@@ -84,16 +92,18 @@
 			}
 			h3 {
 				color: $blue;
-				font-size: 1.1428rem
+				font-size: 1.1428rem;
 			}
 			.main_infomovie_similarMoviesList {
 				.similarMovie {
 					@include span-columns(2.8);
 					text-align: center;
+					height: 122px;
 					img {
 						margin: 10px 10px 20px;
 						display: inline-block;
 						vertical-align: middle;
+					    width: 30%;
 					}
 					.movie_info {
 						display: inline-block;
@@ -101,9 +111,10 @@
 						text-align: left !important;
 						h4 {
 							color: #DEDEDE;
-							font-size: 1rem;
+							font-size: 0.9285rem;
 							font-weight: 400;
 							margin-bottom: 0;
+							max-width: 60px;
 						}
 						span {
 							color: #7B7B7B;
