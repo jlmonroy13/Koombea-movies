@@ -457,6 +457,9 @@ header {
   margin-top: -54px;
   height: 100vh;
   padding-top: 54px; }
+  .main:after {
+    background-color: black;
+    opacity: 0.25; }
   .main .main_leftMenu {
     float: left;
     display: block;

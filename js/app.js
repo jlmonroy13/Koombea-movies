@@ -1,12 +1,34 @@
 $(function() { 
 //Request for Movies and adding to the DOM
-	// var apiKey = "c0b2e256491361d28c75bbe8f9e59a85"; 	
-	// var url_top_rated = "https://api.themoviedb.org/3/movie/top_rated?api_key="+apiKey;
-	// var url_now_playing = "https://api.themoviedb.org/3/movie/now_playing?api_key="+apiKey;
-	// var url_popular = "https://api.themoviedb.org/3/movie/popular?api_key="+apiKey;
-	// var url_upcoming = "https://api.themoviedb.org/3/movie/upcoming?api_key="+apiKey;
-	// var url_request = 'https://api.themoviedb.org/3/movie/'+option+'?api_key='+apiKey;
 	var allMovies = [];
+	var url_now_playing = "https://api.themoviedb.org/3/movie/now_playing?api_key=c0b2e256491361d28c75bbe8f9e59a85";
+	function getMovies(data) { //what to do when the API answer
+		// Creating the movies at left menu
+		var movieHTML = '';
+		//Changing the background image to the cover of the first movie
+		$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+		$('.cover').css('background-size', 'cover');
+		$.each(data.results, function(i, movie){ 
+			data.results[i].favorite = false;
+			
+			//Get only the year
+				var arr = movie.release_date.split('-');
+				var date = arr[0];
+			// Variable to the DOM
+				movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+				movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+				movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+				movieHTML += '</a><h4>'+movie.title+'</h4>';
+				movieHTML += '<span>'+date+'</span>';
+				movieHTML += '</div>';
+		}); // End array cicle
+		$('#leftMenu').html(movieHTML);
+		allMovies = data.results;
+		exists = 0;
+		$('.categories_favorites').remove();
+	};//End getMovies Function
+	$.getJSON(url_now_playing, getMovies);
+/*SELECT LIST MOVIE-------------------------*/
 	$('.main_leftMenu_categories').change(function(){
 		var selectedOption = $('.main_leftMenu_categories option:selected');
 	/*NOW PLAYING SELECTION---------------------------------------------------------------------*/		
@@ -35,6 +57,7 @@ $(function() {
 				}); // End array cicle
 				$('#leftMenu').html(movieHTML);
 				allMovies = data.results;
+				exists = 0;
 				$('.categories_favorites').remove();
 			};//End getMovies Function
 			$.getJSON(url_now_playing, getMovies);
@@ -64,6 +87,7 @@ $(function() {
 				}); // End array cicle
 				$('#leftMenu').html(movieHTML);
 				allMovies = data.results;
+				exists = 0;
 				$('.categories_favorites').remove();
 			};//End getMovies Function
 			$.getJSON(url_popular, getMovies);
@@ -93,6 +117,7 @@ $(function() {
 				}); // End array cicle
 				$('#leftMenu').html(movieHTML);
 				allMovies = data.results;
+				exists = 0;
 				$('.categories_favorites').remove();
 			};//End getMovies Function
 			$.getJSON(url_upcoming, getMovies);
@@ -122,6 +147,7 @@ $(function() {
 				}); // End array cicle
 				$('#leftMenu').html(movieHTML);
 				allMovies = data.results;
+				exists = 0;
 				$('.categories_favorites').remove();
 			};//End getMovies Function
 			$.getJSON(url_top_rated, getMovies);
@@ -147,7 +173,7 @@ $(function() {
 		}			
 	});
 
-	//When you hover a movie of the left menu get the trailer and similar movie
+//When you hover a movie of the left menu get the trailer and similar movie-------------------
 	$('#leftMenu').on('mouseenter', '.btn_movie_leftMenu', function() {
 		var index = $(this).data('index');
 		//Request for trailer of each Movie
@@ -162,10 +188,10 @@ $(function() {
 				allMovies[index].similars_movies = dataSimilars.results;
 			}
 			$.getJSON(url_similars, getSimilars);
-	});
+	}); // End hover a movie of the left menu
 
 
-	//When you click a movie of the left menu
+//When you click a movie of the left menu--------------------------------------
 	$('#leftMenu').on('click', '.btn_movie_leftMenu', function() {
 		var index = $(this).data('index');
 		//Changing the background image to the cover of the first movie
@@ -176,6 +202,7 @@ $(function() {
 		mainHTML += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[index].trailer+'" frameborder="0" allowfullscreen></iframe>'
 		mainHTML += '<div  class="main_infoMovie_description">';
 		mainHTML += '<h2>'+allMovies[index].title+'</h2>';
+		// Checking if this is a favorite movie to change the color of 'add to favorite' button
 		if(allMovies[index].favorite) {
 			mainHTML += '<a href="" data-index="'+index+'" class="btn-favorites btn-favoritesN">REMOVE FROM FAVORITES</a>';
 		} else {
@@ -184,6 +211,7 @@ $(function() {
 		mainHTML += '<p>'+allMovies[index].overview+'</p>';
 		mainHTML += '<h3>Similar Movies</h3>';
 		mainHTML += '<div class="main_infomovie_similarMoviesList">';
+		// generate similar movies
 		$.each(allMovies[index].similars_movies, function(i, data2){ 
 			mainHTML += '<div class="similarMovie">';
 			mainHTML += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
@@ -194,23 +222,63 @@ $(function() {
 		});
 		mainHTML += '</div></div>';
 		$('#info-movie').html(mainHTML);
-	});
+	});//end click a movie of the left menu
 
 
-	
-			
-	//Add and Remove favorites
+
+
+//Add and Remove favorites------------------------------------------------------
 	var index;
 	var exists = 0;
 	$('#info-movie').on('click', '.btn-favorites', function(event){
 		event.preventDefault();
 		index = $(this).data('index');
-		console.log(allMovies[index]);
+		//checking if this is a favorite movie to turn to a no favorite movie
 		if(allMovies[index].favorite) {
+			alert('matthew');
 			allMovies[index].favorite = false;
 			$(this).text('ADD TO FAVORITE');
 			$(this).removeClass('btn-favoritesN');
 			$(this).addClass('btn-favoritesB');
+			var movieHTML2 = '';
+			$.each(allMovies, function(i, movie){ 
+				//if you are in favorite list, refresh the left menu list
+				if(movie.favorite && $('.main_leftMenu_categories option:selected').text()==='Favorites') {
+					//Get only the year
+						var arr = movie.release_date.split('-');
+						var date = arr[0];
+					// Variable to the DOM
+						movieHTML2 += '<div class="main_leftMenu_moviesList_movie">';
+						movieHTML2 += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+						movieHTML2 += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+						movieHTML2 += '</a><h4>'+movie.title+'</h4>';
+						movieHTML2 += '<span>'+date+'</span>';
+						movieHTML2 += '</div>';
+						$('#leftMenu').html(movieHTML2);
+				}
+			}); // End array cicle	
+		}else { //checking if this is a NO favorite movie to turn to a favorite movie
+			alert('tia');
+			allMovies[index].favorite = true;
+			$(this).text('REMOVE FROM FAVORITES');
+			$(this).removeClass('btn-favoritesB');
+			$(this).addClass('btn-favoritesN');
+			// Checking if the favorites option is in the select dropdown menu
+			$('.main_leftMenu_categories option').each(function(){
+			    if (this.value !== 'favorites') {
+					exists += 1;
+			    }else if (this.value === 'favorites') {
+			    	exists += 1;
+			    }
+			});
+			if(exists === 4) {
+				var selectHTML = '';
+				$('.main_leftMenu_categories').append('<option class="categories_favorites" value="favorites">Favorites</option>');
+				exists = 0;
+			}
+		}
+		if(allMovies[index].favorite === true && $('.main_leftMenu_categories option:selected').text()==='Favorites') {
+			alert('jorge');
 			var movieHTML2 = '';
 			$.each(allMovies, function(i, movie){ 
 				if(movie.favorite) {
@@ -227,26 +295,11 @@ $(function() {
 				}	
 			}); // End array cicle
 			$('#leftMenu').html(movieHTML2);
-		} else {
-			allMovies[index].favorite = true;
-			$(this).text('REMOVE FROM FAVORITES');
-			$(this).removeClass('btn-favoritesB');
-			$(this).addClass('btn-favoritesN');
-			$('.main_leftMenu_categories option').each(function(){
-			    if (this.value !== 'favorites') {
-					exists += 1;
-			    }else if (this.value === 'favorites') {
-			    	exists += 1;
-			    }
-			});
-			if(exists === 4) {
-				var selectHTML = '';
-				$('.main_leftMenu_categories').append('<option class="categories_favorites" value="favorites">Favorites</option>');
-				exists = 0;
-			} else if(exists === 5) { 
-				exists = 0;
-			}
+		}
+		if( allMovies[index].favorite === false && $('.main_leftMenu_categories option:selected').text() === 'Favorites' && $('#leftMenu').children().length === 1 ) {	
+			alert('valerie');
+			$('#leftMenu').empty();
+		//If you want to add again to the leftmenu a favorite movie after remove it 	
 		}
 	}); //end favorite click function
-
 });//End Document Ready

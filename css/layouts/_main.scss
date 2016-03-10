@@ -4,6 +4,10 @@
 	margin-top: -54px;
 	height: 100vh;
 	padding-top: 54px;
+	&:after {
+		background-color: black;
+  		opacity: 0.25;
+	}
 	.main_leftMenu {
 		@include span-columns(2);
 		background-color: rgba(#262626, 0.83);
