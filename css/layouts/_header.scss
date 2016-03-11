@@ -13,6 +13,10 @@ header {
 		&:first-child {
 			margin-right: 15px;
 			display: inline-block;
+			$mobile: new-breakpoint(max-width 401px);
+			@include media($mobile) {
+			    margin-right: 10px;
+			}
 			span {
 				display: block;
 			    width: 22px;
@@ -79,7 +83,21 @@ header {
 						}
 					}
 				}
+				$mobile: new-breakpoint(max-width 430px);
+				@include media($mobile) {
+				    margin-right: 10px;
+				}
 			}
+		}
+		$mobile: new-breakpoint(max-width 750px);
+		@include media($mobile) {
+		    left: 47%;
+		    transform: translate(30%, 0);
+		    margin-top: -25px;
+		}
+		$mobile: new-breakpoint(max-width 402px);
+		@include media($mobile) {
+		    left: 52%;
 		}
 	}
 	.navbar_userInfo {
@@ -90,6 +108,10 @@ header {
 		right: 0;
 		top: 0;
 	    margin-right: 20px;
+	    $mobile: new-breakpoint(max-width 750px);
+		@include media($mobile) {
+			display: none;
+		}
 		span {
 			font-size: 1rem;
 			font-family: 'Open Sans', sans-serif;
@@ -97,5 +119,9 @@ header {
 			margin: 0 10px;
 			font-weight: 300;
 		}
+	}
+	$mobile: new-breakpoint(max-width 750px);
+	@include media($mobile) {
+		padding: 0.7142em 0.7142em;
 	}
 }

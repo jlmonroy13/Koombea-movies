@@ -49,17 +49,30 @@
 				}
 			}
 		}
+		$mobile: new-breakpoint(max-width 900px);
+		@include media($mobile) {
+		    position: absolute;
+		    width: 134px;
+		}
 	}
 	.main_infoMovie {
 		@include span-columns(10);
 		max-height: 92vh;
 		overflow: auto;
+		text-align: center;
 		iframe {
 			display: block;
 			margin: 40px auto;
 			-webkit-box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
 			-moz-box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
 			box-shadow: -1px 12px 45px 5px rgba(0,0,0,0.51);
+			width: 45%;
+			min-width: 361px;
+			max-width: 569px;
+			$mobile: new-breakpoint(max-width 399px);
+			@include media($mobile) {
+			    min-width: 341px;
+			}
 		}
 		.main_infoMovie_description {
 			background-color: rgba(#101010, 0.76);
@@ -68,6 +81,7 @@
 			display: inline-block;
 			padding: 1.4285em;
 			margin-bottom: 30px;
+			text-align: left !important;
 			>h2 {
 				color: $blue;
 				font-weight: 300;
@@ -86,6 +100,11 @@
 				background-position: 20px 7px; 
 				border-radius: 6px;
 				float: right;
+				$mobile: new-breakpoint(max-width 750px);
+				@include media($mobile) {
+				    margin: 0 0 10px 20px;
+				    float: none;
+				}
 			}
 			.btn-favoritesN {
 				background-color: #ED7F00;
@@ -124,6 +143,10 @@
 							font-weight: 400;
 							margin-bottom: 0;
 							max-width: 60px;
+							$mobile: new-breakpoint(max-width 1000px);
+							@include media($mobile) {
+							    max-width: 85px;
+							}
 						}
 						span {
 							color: #7B7B7B;
@@ -131,8 +154,29 @@
 							font-weight: 400;
 						}
 					}
+					$mobile: new-breakpoint(max-width 1000px);
+					@include media($mobile) {
+					    @include span-columns(5.5);
+					    min-height: 160px;
+					}
+					$mobile: new-breakpoint(max-width 580px);
+					@include media($mobile) {
+					    @include span-columns(12);
+					    min-height: 200px;
+					}
 				}
 			}
 		}
+		$mobile: new-breakpoint(max-width 900px);
+		@include media($mobile) {
+		    width: 100%;
+		}
+		$mobile: new-breakpoint(max-width 401px);
+		@include media($mobile) {
+		    padding: 0 10px;
+		}
+	}
+	.main_infoMovie-width {
+		width: 100% !important;
 	}
 }

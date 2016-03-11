@@ -262,7 +262,6 @@ $(function() {
 			if($('#leftMenu').children().length === 1) {
 				$('#leftMenu').empty();
 			}
-			console.log(allMovies);
 			$.each(allMovies, function(i, movie){ 
 				if(movie.favorite) {
 				//Get only the year
@@ -280,4 +279,9 @@ $(function() {
 			$('#leftMenu').html(movieHTML2);
 		}
 	}); //end favorite click function
+
+	$('.navbar_btn_leftmenu').click(function(){
+		$('.main_leftMenu').toggle();
+		$('#info-movie').toggleClass('main_infoMovie-width');
+	});
 });//End Document Ready

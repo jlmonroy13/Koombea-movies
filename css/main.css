@@ -393,6 +393,9 @@ header {
     header > a:first-child {
       margin-right: 15px;
       display: inline-block; }
+      @media screen and (max-width: 401px) {
+        header > a:first-child {
+          margin-right: 10px; } }
       header > a:first-child span {
         display: block;
         width: 22px;
@@ -436,6 +439,17 @@ header {
           background-position: 0px -78px;
           width: 24px;
           height: 16px; }
+      @media screen and (max-width: 430px) {
+        header nav ul.navbar_buttons li {
+          margin-right: 10px; } }
+    @media screen and (max-width: 750px) {
+      header nav {
+        left: 47%;
+        transform: translate(30%, 0);
+        margin-top: -25px; } }
+    @media screen and (max-width: 402px) {
+      header nav {
+        left: 52%; } }
   header .navbar_userInfo {
     padding-top: 12px;
     display: flex;
@@ -444,12 +458,18 @@ header {
     right: 0;
     top: 0;
     margin-right: 20px; }
+    @media screen and (max-width: 750px) {
+      header .navbar_userInfo {
+        display: none; } }
     header .navbar_userInfo span {
       font-size: 1rem;
       font-family: 'Open Sans', sans-serif;
       color: #DEDEDE;
       margin: 0 10px;
       font-weight: 300; }
+  @media screen and (max-width: 750px) {
+    header {
+      padding: 0.7142em 0.7142em; } }
 
 .main {
   background: url("../img/main_bckg_movie_cover.jpg") no-repeat;
@@ -496,13 +516,18 @@ header {
         color: #7B7B7B;
         font-weight: 400;
         font-size: 0.8571rem; }
+    @media screen and (max-width: 900px) {
+      .main .main_leftMenu {
+        position: absolute;
+        width: 134px; } }
   .main .main_infoMovie {
     float: left;
     display: block;
     margin-right: 2.35765%;
     width: 82.94039%;
     max-height: 92vh;
-    overflow: auto; }
+    overflow: auto;
+    text-align: center; }
     .main .main_infoMovie:last-child {
       margin-right: 0; }
     .main .main_infoMovie iframe {
@@ -510,14 +535,21 @@ header {
       margin: 40px auto;
       -webkit-box-shadow: -1px 12px 45px 5px rgba(0, 0, 0, 0.51);
       -moz-box-shadow: -1px 12px 45px 5px rgba(0, 0, 0, 0.51);
-      box-shadow: -1px 12px 45px 5px rgba(0, 0, 0, 0.51); }
+      box-shadow: -1px 12px 45px 5px rgba(0, 0, 0, 0.51);
+      width: 45%;
+      min-width: 361px;
+      max-width: 569px; }
+      @media screen and (max-width: 399px) {
+        .main .main_infoMovie iframe {
+          min-width: 341px; } }
     .main .main_infoMovie .main_infoMovie_description {
       background-color: rgba(16, 16, 16, 0.76);
       border-radius: 10px;
       width: 95%;
       display: inline-block;
       padding: 1.4285em;
-      margin-bottom: 30px; }
+      margin-bottom: 30px;
+      text-align: left !important; }
       .main .main_infoMovie .main_infoMovie_description > h2 {
         color: #58A5FF;
         font-weight: 300;
@@ -535,6 +567,10 @@ header {
         background-position: 20px 7px;
         border-radius: 6px;
         float: right; }
+        @media screen and (max-width: 750px) {
+          .main .main_infoMovie .main_infoMovie_description .btn-favorites {
+            margin: 0 0 10px 20px;
+            float: none; } }
       .main .main_infoMovie .main_infoMovie_description .btn-favoritesN {
         background-color: #ED7F00; }
       .main .main_infoMovie .main_infoMovie_description .btn-favoritesB {
@@ -571,9 +607,38 @@ header {
             font-weight: 400;
             margin-bottom: 0;
             max-width: 60px; }
+            @media screen and (max-width: 1000px) {
+              .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie .movie_info h4 {
+                max-width: 85px; } }
           .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie .movie_info span {
             color: #7B7B7B;
             font-size: 0.8571rem;
             font-weight: 400; }
+        @media screen and (max-width: 1000px) {
+          .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie {
+            float: left;
+            display: block;
+            margin-right: 2.35765%;
+            width: 44.55627%;
+            min-height: 160px; }
+            .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie:last-child {
+              margin-right: 0; } }
+        @media screen and (max-width: 580px) {
+          .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie {
+            float: left;
+            display: block;
+            margin-right: 2.35765%;
+            width: 100%;
+            min-height: 200px; }
+            .main .main_infoMovie .main_infoMovie_description .main_infomovie_similarMoviesList .similarMovie:last-child {
+              margin-right: 0; } }
+    @media screen and (max-width: 900px) {
+      .main .main_infoMovie {
+        width: 100%; } }
+    @media screen and (max-width: 401px) {
+      .main .main_infoMovie {
+        padding: 0 10px; } }
+  .main .main_infoMovie-width {
+    width: 100% !important; }
 
 /*# sourceMappingURL=main.css.map */
