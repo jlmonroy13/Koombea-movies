@@ -2,155 +2,340 @@ $(function() {
 //Request for Movies and adding to the DOM
 	var allMovies = [];
 	var url_now_playing = "https://api.themoviedb.org/3/movie/now_playing?api_key=c0b2e256491361d28c75bbe8f9e59a85";
-	function getMovies(data) { //what to do when the API answer
-		// Creating the movies at left menu
-		var movieHTML = '';
-		//Changing the background image to the cover of the first movie
-		$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
-		$('.cover').css('background-size', 'cover');
-		$.each(data.results, function(i, movie){ 
-			data.results[i].favorite = false;
-			
-			//Get only the year
-				var arr = movie.release_date.split('-');
-				var date = arr[0];
-			// Variable to the DOM
-				movieHTML += '<div class="main_leftMenu_moviesList_movie">';
-				movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-				movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-				movieHTML += '</a><h4>'+movie.title+'</h4>';
-				movieHTML += '<span>'+date+'</span>';
-				movieHTML += '</div>';
-		}); // End array cicle
-		$('#leftMenu').html(movieHTML);
-		allMovies = data.results;
-		exists = 0;
-		$('.categories_favorites').remove();
-	};//End getMovies Function
-	$.getJSON(url_now_playing, getMovies);
+	var htmlStart = '';
+	//REQUEST FOR THE FIRST LIST (NOY PLAYING)
+	$.ajax({ type: 'GET', url: url_now_playing, async: false,
+		success: function(data) { //what to do when the API answer
+			// Creating the movies at left menu
+			var movieHTML = '';
+			//Changing the background image to the cover of the first movie
+			$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+			$('.cover').css('background-size', 'cover');
+			$.each(data.results, function(i, movie){ 
+				data.results[i].favorite = false;
+				
+				//Get only the year
+					var arr = movie.release_date.split('-');
+					var date = arr[0];
+				// Variable to the DOM
+					movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+					movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+					movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+					movieHTML += '</a><h4>'+movie.title+'</h4>';
+					movieHTML += '<span>'+date+'</span>';
+					movieHTML += '</div>';
+			}); // End array cicle
+			$('#leftMenu').html(movieHTML);
+			allMovies = data.results;
+			exists = 0;
+			$('.categories_favorites').remove();
+		}
+	});//End getMovies Function
+	//Request for trailer of the first Movie
+	$.ajax({ type: 'GET',
+		url: 'http://api.themoviedb.org/3/movie/'+allMovies[0].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+		async: false,
+		success: function(dataTrailer) {
+			allMovies[0].trailer = dataTrailer.videos.results[0].key;
+		}
+	});
+	//Request for similar movies of the first Movie
+	$.ajax({ type: 'GET',
+		url: 'https://api.themoviedb.org/3/genre/'+allMovies[0].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+		async: false,
+		success: function(dataSimilars) {
+			allMovies[0].similars_movies = dataSimilars.results;
+		}
+	});
+	//Inserting the information of the first movie when the page is load
+	htmlStart += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[0].trailer+'" frameborder="0" allowfullscreen></iframe>'
+	htmlStart += '<div  class="main_infoMovie_description">';
+	htmlStart += '<h2>'+allMovies[0].title+'</h2>';
+	htmlStart += '<a href="" data-index="'+0+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+	htmlStart += '<p>'+allMovies[0].overview+'</p>';
+	htmlStart += '<h3>Similar Movies</h3>';
+	htmlStart += '<div class="main_infomovie_similarMoviesList">';
+	// generate similar movies
+	$.each(allMovies[0].similars_movies, function(i, data2){ 
+		htmlStart += '<div class="similarMovie">';
+		htmlStart += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
+		htmlStart += '<div class="movie_info">';
+		htmlStart += '<h4>'+data2.title+'</h4>';
+		htmlStart += '<span>2015</span></div>';
+		htmlStart += '</div>';
+	});
+	htmlStart += '</div></div>';
+	$('#info-movie').html(htmlStart);
+
+
 /*SELECT LIST MOVIE-------------------------*/
 	$('.main_leftMenu_categories').change(function(){
+		var htmlStart1 = '';
 		var selectedOption = $('.main_leftMenu_categories option:selected');
 	/*NOW PLAYING SELECTION---------------------------------------------------------------------*/		
 		if( selectedOption.val() == 'now_playing') {		
 			var url_now_playing = "https://api.themoviedb.org/3/movie/now_playing?api_key=c0b2e256491361d28c75bbe8f9e59a85";
 			$('#info-movie').empty();
-			function getMovies(data) { //what to do when the API answer
-				// Creating the movies at left menu
-				var movieHTML = '';
-				//Changing the background image to the cover of the first movie
-				$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
-				$('.cover').css('background-size', 'cover');
-				$.each(data.results, function(i, movie){ 
-					data.results[i].favorite = false;
-					
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML += '</a><h4>'+movie.title+'</h4>';
-						movieHTML += '<span>'+date+'</span>';
-						movieHTML += '</div>';
-				}); // End array cicle
-				$('#leftMenu').html(movieHTML);
-				allMovies = data.results;
-				exists = 0;
-				$('.categories_favorites').remove();
-			};//End getMovies Function
-			$.getJSON(url_now_playing, getMovies);
+			//Request for the Now playing list
+			$.ajax({ type: 'GET', url: url_now_playing, async: false, success: function(data) { //what to do when the API answer
+					// Creating the movies at left menu
+					var movieHTML = '';
+					//Changing the background image to the cover of the first movie
+					$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+					$('.cover').css('background-size', 'cover');
+					$.each(data.results, function(i, movie){ 
+						data.results[i].favorite = false;
+						
+						//Get only the year
+							var arr = movie.release_date.split('-');
+							var date = arr[0];
+						// Variable to the DOM
+							movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+							movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+							movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+							movieHTML += '</a><h4>'+movie.title+'</h4>';
+							movieHTML += '<span>'+date+'</span>';
+							movieHTML += '</div>';
+					}); // End array cicle
+					$('#leftMenu').html(movieHTML);
+					allMovies = data.results;
+					exists = 0;
+					$('.categories_favorites').remove();
+				}
+			});//End getMovies Function
+			//Request for trailer of each Movie
+			$.ajax({ type: 'GET',
+				url: 'http://api.themoviedb.org/3/movie/'+allMovies[0].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+				async: false,
+				success: function(dataTrailer) {
+					allMovies[0].trailer = dataTrailer.videos.results[0].key;
+				}
+			});
+			//Request for similar movies of each Movie
+			$.ajax({ type: 'GET',
+				url: 'https://api.themoviedb.org/3/genre/'+allMovies[0].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+				async: false,
+				success: function(dataSimilars) {
+					allMovies[0].similars_movies = dataSimilars.results;
+				}
+			});
+			//Insert information of the first movie of the list
+			htmlStart1 += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[0].trailer+'" frameborder="0" allowfullscreen></iframe>'
+			htmlStart1 += '<div  class="main_infoMovie_description">';
+			htmlStart1 += '<h2>'+allMovies[0].title+'</h2>';
+			htmlStart1 += '<a href="" data-index="'+0+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+			htmlStart1 += '<p>'+allMovies[0].overview+'</p>';
+			htmlStart1 += '<h3>Similar Movies</h3>';
+			htmlStart1 += '<div class="main_infomovie_similarMoviesList">';
+			// generate similar movies
+			$.each(allMovies[0].similars_movies, function(i, data2){ 
+				htmlStart1 += '<div class="similarMovie">';
+				htmlStart1 += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
+				htmlStart1 += '<div class="movie_info">';
+				htmlStart1 += '<h4>'+data2.title+'</h4>';
+				htmlStart1 += '<span>2015</span></div>';
+				htmlStart1 += '</div>';
+			});
+			htmlStart1 += '</div></div>';
+			$('#info-movie').html(htmlStart1);
 	/*POPULAR SELECTION---------------------------------------------------------------------*/			
 		}else if(selectedOption.val() == 'popular') {
 			var url_popular = "https://api.themoviedb.org/3/movie/popular?api_key=c0b2e256491361d28c75bbe8f9e59a85";
 			$('#info-movie').empty();
-			function getMovies(data) { //what to do when the API answer
-				// Creating the movies at left menu
-				var movieHTML = '';
-				//Changing the background image to the cover of the first movie
-				$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
-				$('.cover').css('background-size', 'cover');
-				$.each(data.results, function(i, movie){ 
-					data.results[i].favorite = false;
-		
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML += '</a><h4>'+movie.title+'</h4>';
-						movieHTML += '<span>'+date+'</span>';
-						movieHTML += '</div>';
-				}); // End array cicle
-				$('#leftMenu').html(movieHTML);
-				allMovies = data.results;
-				exists = 0;
-				$('.categories_favorites').remove();
-			};//End getMovies Function
-			$.getJSON(url_popular, getMovies);
+			//Request for the popular list
+			$.ajax({ type: 'GET', url: url_popular, async: false, success: function(data) { //what to do when the API answer
+					// Creating the movies at left menu
+					var movieHTML = '';
+					//Changing the background image to the cover of the first movie
+					$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+					$('.cover').css('background-size', 'cover');
+					$.each(data.results, function(i, movie){ 
+						data.results[i].favorite = false;
+						
+						//Get only the year
+							var arr = movie.release_date.split('-');
+							var date = arr[0];
+						// Variable to the DOM
+							movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+							movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+							movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+							movieHTML += '</a><h4>'+movie.title+'</h4>';
+							movieHTML += '<span>'+date+'</span>';
+							movieHTML += '</div>';
+					}); // End array cicle
+					$('#leftMenu').html(movieHTML);
+					allMovies = data.results;
+					exists = 0;
+					$('.categories_favorites').remove();
+				}
+			});//End getMovies Function
+			//Request for trailer of each Movie
+			$.ajax({ type: 'GET',
+				url: 'http://api.themoviedb.org/3/movie/'+allMovies[0].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+				async: false,
+				success: function(dataTrailer) {
+					allMovies[0].trailer = dataTrailer.videos.results[0].key;
+				}
+			});
+			//Request for similar movies of each Movie
+			$.ajax({ type: 'GET',
+				url: 'https://api.themoviedb.org/3/genre/'+allMovies[0].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+				async: false,
+				success: function(dataSimilars) {
+					allMovies[0].similars_movies = dataSimilars.results;
+				}
+			});
+			//Insert information of the first movie of the list
+			htmlStart1 += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[0].trailer+'" frameborder="0" allowfullscreen></iframe>'
+			htmlStart1 += '<div  class="main_infoMovie_description">';
+			htmlStart1 += '<h2>'+allMovies[0].title+'</h2>';
+			htmlStart1 += '<a href="" data-index="'+0+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+			htmlStart1 += '<p>'+allMovies[0].overview+'</p>';
+			htmlStart1 += '<h3>Similar Movies</h3>';
+			htmlStart1 += '<div class="main_infomovie_similarMoviesList">';
+			// generate similar movies
+			$.each(allMovies[0].similars_movies, function(i, data2){ 
+				htmlStart1 += '<div class="similarMovie">';
+				htmlStart1 += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
+				htmlStart1 += '<div class="movie_info">';
+				htmlStart1 += '<h4>'+data2.title+'</h4>';
+				htmlStart1 += '<span>2015</span></div>';
+				htmlStart1 += '</div>';
+			});
+			htmlStart1 += '</div></div>';
+			$('#info-movie').html(htmlStart1);
 	/*UPCOMING SELECTION---------------------------------------------------------------------*/			
 		}else if(selectedOption.val() == 'upcoming') {
 			var url_upcoming = "https://api.themoviedb.org/3/movie/upcoming?api_key=c0b2e256491361d28c75bbe8f9e59a85";
 			$('#info-movie').empty();
-			function getMovies(data) { //what to do when the API answer
-				// Creating the movies at left menu
-				var movieHTML = '';
-				//Changing the background image to the cover of the first movie
-				$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
-				$('.cover').css('background-size', 'cover');
-				$.each(data.results, function(i, movie){ 
-					data.results[i].favorite = false;
-
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML += '</a><h4>'+movie.title+'</h4>';
-						movieHTML += '<span>'+date+'</span>';
-						movieHTML += '</div>';
-				}); // End array cicle
-				$('#leftMenu').html(movieHTML);
-				allMovies = data.results;
-				exists = 0;
-				$('.categories_favorites').remove();
-			};//End getMovies Function
-			$.getJSON(url_upcoming, getMovies);
+			//Request for the upcoming list
+			$.ajax({ type: 'GET', url: url_upcoming, async: false, success: function(data) { //what to do when the API answer
+					// Creating the movies at left menu
+					var movieHTML = '';
+					//Changing the background image to the cover of the first movie
+					$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+					$('.cover').css('background-size', 'cover');
+					$.each(data.results, function(i, movie){ 
+						data.results[i].favorite = false;
+						
+						//Get only the year
+							var arr = movie.release_date.split('-');
+							var date = arr[0];
+						// Variable to the DOM
+							movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+							movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+							movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+							movieHTML += '</a><h4>'+movie.title+'</h4>';
+							movieHTML += '<span>'+date+'</span>';
+							movieHTML += '</div>';
+					}); // End array cicle
+					$('#leftMenu').html(movieHTML);
+					allMovies = data.results;
+					exists = 0;
+					$('.categories_favorites').remove();
+				}
+			});//End getMovies Function
+			//Request for trailer of each Movie
+			$.ajax({ type: 'GET',
+				url: 'http://api.themoviedb.org/3/movie/'+allMovies[0].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+				async: false,
+				success: function(dataTrailer) {
+					allMovies[0].trailer = dataTrailer.videos.results[0].key;
+				}
+			});
+			//Request for similar movies of each Movie
+			$.ajax({ type: 'GET',
+				url: 'https://api.themoviedb.org/3/genre/'+allMovies[0].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+				async: false,
+				success: function(dataSimilars) {
+					allMovies[0].similars_movies = dataSimilars.results;
+				}
+			});
+			//Insert information of the first movie of the list
+			htmlStart1 += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[0].trailer+'" frameborder="0" allowfullscreen></iframe>'
+			htmlStart1 += '<div  class="main_infoMovie_description">';
+			htmlStart1 += '<h2>'+allMovies[0].title+'</h2>';
+			htmlStart1 += '<a href="" data-index="'+0+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+			htmlStart1 += '<p>'+allMovies[0].overview+'</p>';
+			htmlStart1 += '<h3>Similar Movies</h3>';
+			htmlStart1 += '<div class="main_infomovie_similarMoviesList">';
+			// generate similar movies
+			$.each(allMovies[0].similars_movies, function(i, data2){ 
+				htmlStart1 += '<div class="similarMovie">';
+				htmlStart1 += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
+				htmlStart1 += '<div class="movie_info">';
+				htmlStart1 += '<h4>'+data2.title+'</h4>';
+				htmlStart1 += '<span>2015</span></div>';
+				htmlStart1 += '</div>';
+			});
+			htmlStart1 += '</div></div>';
+			$('#info-movie').html(htmlStart1);
 	/*TOP RELATED SELECTION---------------------------------------------------------------------*/			
 		}else if(selectedOption.val() == 'top_rated') {
 			var url_top_rated = "https://api.themoviedb.org/3/movie/top_rated?api_key=c0b2e256491361d28c75bbe8f9e59a85";
 			$('#info-movie').empty();
-			function getMovies(data) { //what to do when the API answer
-				// Creating the movies at left menu
-				var movieHTML = '';
-				//Changing the background image to the cover of the first movie
-				$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
-				$('.cover').css('background-size', 'cover');
-				$.each(data.results, function(i, movie){ 
-					data.results[i].favorite = false;
-
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML += '</a><h4>'+movie.title+'</h4>';
-						movieHTML += '<span>'+date+'</span>';
-						movieHTML += '</div>';
-				}); // End array cicle
-				$('#leftMenu').html(movieHTML);
-				allMovies = data.results;
-				exists = 0;
-				$('.categories_favorites').remove();
-			};//End getMovies Function
-			$.getJSON(url_top_rated, getMovies);
+			//Request for the top_rated list
+			$.ajax({ type: 'GET', url: url_top_rated, async: false, success: function(data) { //what to do when the API answer
+					// Creating the movies at left menu
+					var movieHTML = '';
+					//Changing the background image to the cover of the first movie
+					$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+data.results[0].backdrop_path+'") no-repeat');
+					$('.cover').css('background-size', 'cover');
+					$.each(data.results, function(i, movie){ 
+						data.results[i].favorite = false;
+						
+						//Get only the year
+							var arr = movie.release_date.split('-');
+							var date = arr[0];
+						// Variable to the DOM
+							movieHTML += '<div class="main_leftMenu_moviesList_movie">';
+							movieHTML += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+							movieHTML += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+							movieHTML += '</a><h4>'+movie.title+'</h4>';
+							movieHTML += '<span>'+date+'</span>';
+							movieHTML += '</div>';
+					}); // End array cicle
+					$('#leftMenu').html(movieHTML);
+					allMovies = data.results;
+					exists = 0;
+					$('.categories_favorites').remove();
+				}
+			});//End getMovies Function
+			//Request for trailer of each Movie
+			$.ajax({ type: 'GET',
+				url: 'http://api.themoviedb.org/3/movie/'+allMovies[0].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+				async: false,
+				success: function(dataTrailer) {
+					allMovies[0].trailer = dataTrailer.videos.results[0].key;
+				}
+			});
+			//Request for similar movies of each Movie
+			$.ajax({ type: 'GET',
+				url: 'https://api.themoviedb.org/3/genre/'+allMovies[0].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+				async: false,
+				success: function(dataSimilars) {
+					allMovies[0].similars_movies = dataSimilars.results;
+				}
+			});
+			//Insert information of the first movie of the list
+			htmlStart1 += '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+allMovies[0].trailer+'" frameborder="0" allowfullscreen></iframe>'
+			htmlStart1 += '<div  class="main_infoMovie_description">';
+			htmlStart1 += '<h2>'+allMovies[0].title+'</h2>';
+			htmlStart1 += '<a href="" data-index="'+0+'" class="btn-favorites btn-favoritesB">ADD TO FAVORITES</a>';
+			htmlStart1 += '<p>'+allMovies[0].overview+'</p>';
+			htmlStart1 += '<h3>Similar Movies</h3>';
+			htmlStart1 += '<div class="main_infomovie_similarMoviesList">';
+			// generate similar movies
+			$.each(allMovies[0].similars_movies, function(i, data2){ 
+				htmlStart1 += '<div class="similarMovie">';
+				htmlStart1 += '<img src="http://image.tmdb.org/t/p/w500'+data2.poster_path+'">';
+				htmlStart1 += '<div class="movie_info">';
+				htmlStart1 += '<h4>'+data2.title+'</h4>';
+				htmlStart1 += '<span>2015</span></div>';
+				htmlStart1 += '</div>';
+			});
+			htmlStart1 += '</div></div>';
+			$('#info-movie').html(htmlStart1);
 	/*FAVORITES SELECTION---------------------------------------------------------------------*/		
 		}else if(selectedOption.val() == 'favorites') {
 			console.log(allMovies);
@@ -173,27 +358,29 @@ $(function() {
 		}			
 	});
 
-//When you hover a movie of the left menu get the trailer and similar movie-------------------
-	$('#leftMenu').on('mouseenter', '.btn_movie_leftMenu', function() {
-		var index = $(this).data('index');
-		//Request for trailer of each Movie
-			var url_trailer = 'http://api.themoviedb.org/3/movie/'+allMovies[index].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos';
-			function getTrailer(dataTrailer) {
-				allMovies[index].trailer = dataTrailer.videos.results[0].key;
-			}
-			$.getJSON(url_trailer, getTrailer);
-		//Request for similar movies of each Movie
-			var url_similars = 'https://api.themoviedb.org/3/genre/'+allMovies[index].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85';
-			function getSimilars(dataSimilars) { 
-				allMovies[index].similars_movies = dataSimilars.results;
-			}
-			$.getJSON(url_similars, getSimilars);
-	}); // End hover a movie of the left menu
-
-
 //When you click a movie of the left menu--------------------------------------
 	$('#leftMenu').on('click', '.btn_movie_leftMenu', function() {
 		var index = $(this).data('index');
+		//Request for trailer of each Movie
+		$.ajax({ type: 'GET',
+			url: 'http://api.themoviedb.org/3/movie/'+allMovies[index].id+'?api_key=c0b2e256491361d28c75bbe8f9e59a85&append_to_response=videos',
+			async: false,
+			success: function(dataTrailer) {
+				if(dataTrailer.videos.results.length === 0) {
+					alert('This movie has not video trailer');
+				}else {
+					allMovies[index].trailer = dataTrailer.videos.results[0].key;
+				}
+			},
+		});
+		//Request for similar movies of each Movie
+		$.ajax({ type: 'GET',
+			url: 'https://api.themoviedb.org/3/genre/'+allMovies[index].genre_ids[0]+'/movies?api_key=c0b2e256491361d28c75bbe8f9e59a85',
+			async: false,
+			success: function(dataSimilars) {
+				allMovies[index].similars_movies = dataSimilars.results;
+			}
+		});
 		//Changing the background image to the cover of the first movie
 		$('.main').css('background', 'url("http://image.tmdb.org/t/p/w1920'+ allMovies[index].backdrop_path +'") no-repeat');
 		$('.cover').css('background-size', 'cover');
@@ -279,8 +466,7 @@ $(function() {
 			$('#leftMenu').html(movieHTML2);
 		}
 	}); //end favorite click function
-
-	$('.navbar_btn_leftmenu').click(function(){
+	$('.navbar_btn_leftmenu').click(function(){ // Function to hide the left Menu
 		$('.main_leftMenu').toggle();
 		$('#info-movie').toggleClass('main_infoMovie-width');
 	});
