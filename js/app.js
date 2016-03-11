@@ -224,41 +224,20 @@ $(function() {
 		$('#info-movie').html(mainHTML);
 	});//end click a movie of the left menu
 
-
-
-
 //Add and Remove favorites------------------------------------------------------
 	var index;
 	var exists = 0;
 	$('#info-movie').on('click', '.btn-favorites', function(event){
 		event.preventDefault();
 		index = $(this).data('index');
-		//checking if this is a favorite movie to turn to a no favorite movie
+		//If the movie you click is a favorite movie change to a no favorite movie
 		if(allMovies[index].favorite) {
-			alert('matthew');
 			allMovies[index].favorite = false;
-			$(this).text('ADD TO FAVORITE');
+			$(this).text('ADD TO FAVORITES');
 			$(this).removeClass('btn-favoritesN');
 			$(this).addClass('btn-favoritesB');
-			var movieHTML2 = '';
-			$.each(allMovies, function(i, movie){ 
-				//if you are in favorite list, refresh the left menu list
-				if(movie.favorite && $('.main_leftMenu_categories option:selected').text()==='Favorites') {
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML2 += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML2 += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML2 += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML2 += '</a><h4>'+movie.title+'</h4>';
-						movieHTML2 += '<span>'+date+'</span>';
-						movieHTML2 += '</div>';
-						$('#leftMenu').html(movieHTML2);
-				}
-			}); // End array cicle	
-		}else { //checking if this is a NO favorite movie to turn to a favorite movie
-			alert('tia');
+		//If the movie you click is a NO favorite movie change to a favorite movie and add favorite option	
+		}else if(allMovies[index].favorite === false) { 
 			allMovies[index].favorite = true;
 			$(this).text('REMOVE FROM FAVORITES');
 			$(this).removeClass('btn-favoritesB');
@@ -277,29 +256,28 @@ $(function() {
 				exists = 0;
 			}
 		}
-		if(allMovies[index].favorite === true && $('.main_leftMenu_categories option:selected').text()==='Favorites') {
-			alert('jorge');
-			var movieHTML2 = '';
+		//Refresh the left menu when favorites option is selected
+		var movieHTML2 = '';
+		if($('.main_leftMenu_categories option:selected').text()==='Favorites') {
+			if($('#leftMenu').children().length === 1) {
+				$('#leftMenu').empty();
+			}
+			console.log(allMovies);
 			$.each(allMovies, function(i, movie){ 
 				if(movie.favorite) {
-					//Get only the year
-						var arr = movie.release_date.split('-');
-						var date = arr[0];
-					// Variable to the DOM
-						movieHTML2 += '<div class="main_leftMenu_moviesList_movie">';
-						movieHTML2 += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
-						movieHTML2 += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
-						movieHTML2 += '</a><h4>'+movie.title+'</h4>';
-						movieHTML2 += '<span>'+date+'</span>';
-						movieHTML2 += '</div>';
+				//Get only the year
+					var arr = movie.release_date.split('-');
+					var date = arr[0];
+				// Variable to the DOM
+					movieHTML2 += '<div class="main_leftMenu_moviesList_movie">';
+					movieHTML2 += '<a class="btn_movie_leftMenu" data-index="'+i+'" href="javascript:void(0)">';
+					movieHTML2 += '<img class="img_movie_leftMenu" src="http://image.tmdb.org/t/p/w500'+movie.poster_path+'">';
+					movieHTML2 += '</a><h4>'+movie.title+'</h4>';
+					movieHTML2 += '<span>'+date+'</span>';
+					movieHTML2 += '</div>';
 				}	
-			}); // End array cicle
+			}); // End array cicle	
 			$('#leftMenu').html(movieHTML2);
-		}
-		if( allMovies[index].favorite === false && $('.main_leftMenu_categories option:selected').text() === 'Favorites' && $('#leftMenu').children().length === 1 ) {	
-			alert('valerie');
-			$('#leftMenu').empty();
-		//If you want to add again to the leftmenu a favorite movie after remove it 	
 		}
 	}); //end favorite click function
 });//End Document Ready
